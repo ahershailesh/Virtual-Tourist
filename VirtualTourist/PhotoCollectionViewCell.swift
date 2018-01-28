@@ -1,0 +1,34 @@
+//
+//  PhotoCollectionViewCell.swift
+//  VirtualTourist
+//
+//  Created by Shailesh Aher on 1/28/18.
+//  Copyright © 2018 Shailesh Aher. All rights reserved.
+//
+
+import UIKit
+
+class PhotoCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var progressIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var crossButton: UIButton!
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    var photo : Photo? {
+        didSet {
+            guard let _ = photo else { return }
+            let image = UIImage(contentsOfFile: FlickrHandler.shared.getUrl(photo: photo!))
+            imageView.image = image
+            progressIndicator.startAnimating()
+            titleLabel.text = photo?.title
+            backgroundColor = UIColor.lightGray
+            crossButton.backgroundColor = UIColor.lightGray
+        }
+    }
+    override func awakeFromNib() {
+        self.layer.cornerRadius = 4
+        crossButton.layer.cornerRadius = crossButton.frame.width/2
+    }
+}

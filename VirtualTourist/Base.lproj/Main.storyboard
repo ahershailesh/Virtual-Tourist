@@ -49,28 +49,65 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dDV-P7-WOu">
-                            <size key="itemSize" width="50" height="50"/>
+                            <size key="itemSize" width="140" height="135"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="3eg-Ej-tiu">
-                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="3eg-Ej-tiu" customClass="PhotoCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="140" height="135"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="140" height="135"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0ns-yu-Ksm">
-                                            <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="red-rm-0Bb">
+                                            <rect key="frame" x="0.0" y="0.0" width="140" height="135"/>
+                                        </imageView>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="sVA-6n-JpW">
+                                            <rect key="frame" x="60" y="57" width="20" height="20"/>
                                         </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAm-ac-ZpC">
+                                            <rect key="frame" x="0.0" y="119" width="140" height="16"/>
+                                            <color key="backgroundColor" red="0.5759323756469592" green="0.58163467639593902" blue="0.58163467639593902" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="BCD-9u-VEQ"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WpQ-OZ-CwA">
+                                            <rect key="frame" x="0.0" y="0.0" width="16" height="16"/>
+                                            <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="16" id="8Ga-x1-Duh"/>
+                                                <constraint firstAttribute="width" constant="16" id="VWN-6F-tMh"/>
+                                            </constraints>
+                                            <state key="normal" image="cross"/>
+                                        </button>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstItem="0ns-yu-Ksm" firstAttribute="centerX" secondItem="3eg-Ej-tiu" secondAttribute="centerX" id="V8E-hb-n8y"/>
-                                    <constraint firstItem="0ns-yu-Ksm" firstAttribute="centerY" secondItem="3eg-Ej-tiu" secondAttribute="centerY" id="cql-ZN-kjV"/>
+                                    <constraint firstAttribute="bottom" secondItem="red-rm-0Bb" secondAttribute="bottom" id="5w4-jQ-Kc4"/>
+                                    <constraint firstItem="qAm-ac-ZpC" firstAttribute="leading" secondItem="3eg-Ej-tiu" secondAttribute="leading" id="H4m-PS-OIe"/>
+                                    <constraint firstItem="sVA-6n-JpW" firstAttribute="centerX" secondItem="3eg-Ej-tiu" secondAttribute="centerX" id="Lcy-Uk-keb"/>
+                                    <constraint firstItem="red-rm-0Bb" firstAttribute="top" secondItem="3eg-Ej-tiu" secondAttribute="top" id="Pz9-By-ml8"/>
+                                    <constraint firstItem="sVA-6n-JpW" firstAttribute="centerY" secondItem="3eg-Ej-tiu" secondAttribute="centerY" id="Yzz-1V-L4r"/>
+                                    <constraint firstItem="WpQ-OZ-CwA" firstAttribute="top" secondItem="3eg-Ej-tiu" secondAttribute="top" id="b45-i3-AGk"/>
+                                    <constraint firstItem="red-rm-0Bb" firstAttribute="leading" secondItem="3eg-Ej-tiu" secondAttribute="leading" id="doa-Bl-muy"/>
+                                    <constraint firstAttribute="trailing" secondItem="qAm-ac-ZpC" secondAttribute="trailing" id="e7E-RM-28a"/>
+                                    <constraint firstAttribute="bottom" secondItem="qAm-ac-ZpC" secondAttribute="bottom" id="iI0-4o-TBV"/>
+                                    <constraint firstItem="WpQ-OZ-CwA" firstAttribute="leading" secondItem="3eg-Ej-tiu" secondAttribute="leading" id="ixX-MR-CTU"/>
+                                    <constraint firstAttribute="trailing" secondItem="red-rm-0Bb" secondAttribute="trailing" id="oCD-c2-9RQ"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="crossButton" destination="WpQ-OZ-CwA" id="gtk-jW-EvA"/>
+                                    <outlet property="imageView" destination="red-rm-0Bb" id="6rc-RM-B5a"/>
+                                    <outlet property="progressIndicator" destination="sVA-6n-JpW" id="J45-qi-Kb9"/>
+                                    <outlet property="titleLabel" destination="qAm-ac-ZpC" id="36r-z2-mrA"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -102,4 +139,7 @@
             <point key="canvasLocation" x="152" y="36.881559220389811"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="cross" width="48" height="48"/>
+    </resources>
 </document>

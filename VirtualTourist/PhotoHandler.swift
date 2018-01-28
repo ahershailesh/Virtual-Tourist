@@ -35,6 +35,7 @@ class PhotoHandler: NSObject {
                     let photos = array.map({ (dict) -> Photo in
                         let photo = Photo()
                         photo.map(dictionary: dict)
+                        photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
                         return photo
                     })
                     self.photos = photos

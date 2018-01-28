@@ -23,6 +23,12 @@ class FlickrHandler: NSObject {
         networkManager.get(queryParam: queryParam, completionBlock: completionBlock)
     }
     
+    func getUrl(photo: Photo) -> String {
+        let imageName = photo.id! + "_" + photo.secret! + ".jpg"
+        let url = " http://farm"+photo.farm!+".staticflickr.com/"+photo.server!+"/" + imageName
+        return url
+    }
+    
 }
 
 extension FlickrHandler : NetworkProtocol {
