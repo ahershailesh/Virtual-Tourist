@@ -16,6 +16,10 @@
 		8A37F166201D94C000B13137 /* FlickrHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F165201D94C000B13137 /* FlickrHandler.swift */; };
 		8A37F168201D950300B13137 /* PhotoHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F167201D950300B13137 /* PhotoHandler.swift */; };
 		8A37F16A201DAC5E00B13137 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F169201DAC5E00B13137 /* Constants.swift */; };
+		8A37F16C201DC43300B13137 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F16B201DC43300B13137 /* NetworkManager.swift */; };
+		8A37F16E201E18DB00B13137 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F16D201E18DB00B13137 /* Photo.swift */; };
+		8A37F171201E197F00B13137 /* PhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F170201E197F00B13137 /* PhotoResponse.swift */; };
+		8A37F173201E1A5D00B13137 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F172201E1A5D00B13137 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,10 @@
 		8A37F165201D94C000B13137 /* FlickrHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrHandler.swift; sourceTree = "<group>"; };
 		8A37F167201D950300B13137 /* PhotoHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoHandler.swift; sourceTree = "<group>"; };
 		8A37F169201DAC5E00B13137 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8A37F16B201DC43300B13137 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		8A37F16D201E18DB00B13137 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		8A37F170201E197F00B13137 /* PhotoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResponse.swift; sourceTree = "<group>"; };
+		8A37F172201E1A5D00B13137 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +70,7 @@
 		8A37F14E201CFED900B13137 /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				8A37F16F201E196900B13137 /* Model */,
 				8A37F161201CFFFA00B13137 /* MapViewController.swift */,
 				8A37F14F201CFED900B13137 /* AppDelegate.swift */,
 				8A37F153201CFED900B13137 /* Main.storyboard */,
@@ -72,8 +81,19 @@
 				8A37F165201D94C000B13137 /* FlickrHandler.swift */,
 				8A37F167201D950300B13137 /* PhotoHandler.swift */,
 				8A37F169201DAC5E00B13137 /* Constants.swift */,
+				8A37F16B201DC43300B13137 /* NetworkManager.swift */,
+				8A37F172201E1A5D00B13137 /* Extensions.swift */,
 			);
 			path = VirtualTourist;
+			sourceTree = "<group>";
+		};
+		8A37F16F201E196900B13137 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8A37F16D201E18DB00B13137 /* Photo.swift */,
+				8A37F170201E197F00B13137 /* PhotoResponse.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,9 +168,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A37F171201E197F00B13137 /* PhotoResponse.swift in Sources */,
+				8A37F16E201E18DB00B13137 /* Photo.swift in Sources */,
 				8A37F168201D950300B13137 /* PhotoHandler.swift in Sources */,
 				8A37F162201CFFFA00B13137 /* MapViewController.swift in Sources */,
 				8A37F150201CFED900B13137 /* AppDelegate.swift in Sources */,
+				8A37F173201E1A5D00B13137 /* Extensions.swift in Sources */,
+				8A37F16C201DC43300B13137 /* NetworkManager.swift in Sources */,
 				8A37F16A201DAC5E00B13137 /* Constants.swift in Sources */,
 				8A37F166201D94C000B13137 /* FlickrHandler.swift in Sources */,
 				8A37F164201D82B300B13137 /* PhotoAlbumViewController.swift in Sources */,

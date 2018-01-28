@@ -9,13 +9,12 @@
 import UIKit
 
 protocol PhotoDelegate {
-    func photoLoaded(photo: [UIImage])
+    func photoLoaded(photo: [Photo])
 }
 
 class PhotoHandler: NSObject {
 
-    static let shared = PhotoHandler()
-    var photos : [UIImage]?
+    var photos : [Photo]?
     var delegate : PhotoDelegate?
     
     override init() {
@@ -30,8 +29,18 @@ class PhotoHandler: NSObject {
     }
     
     func getPhotosByLocation(latitude lat: Double, longitude long: Double) {
-        
+        FlickrHandler.shared.getPhotoByLocation(lat: lat, long: long)  { (success, response, error) in
+            if let dict = response as? [String : Any] {
+                if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
+                    let photos = array.map({ (dict) -> Photo in
+                        let photo = Photo()
+                        photo.map(dictionary: dict)
+                        return photo
+                    })
+                    self.photos = photos
+                    self.delegate?.photoLoaded(photo: photos)
+                }
+            }
+        }
     }
-    
-    
 }

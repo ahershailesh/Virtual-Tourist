@@ -18,7 +18,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addLocations()
         mapView.delegate = self
         
         let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
@@ -50,8 +49,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let urlString = view.annotation?.subtitle, let url = URL(string: urlString!) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController, let annotation = view.annotation {
+            albumViewController.lat =  annotation.coordinate.latitude
+            albumViewController.long = annotation.coordinate.longitude
+            navigationController?.pushViewController(albumViewController, animated: true)
         }
     }
 }
