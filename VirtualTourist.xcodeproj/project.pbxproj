@@ -21,6 +21,7 @@
 		8A37F171201E197F00B13137 /* PhotoResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F170201E197F00B13137 /* PhotoResponse.swift */; };
 		8A37F173201E1A5D00B13137 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F172201E1A5D00B13137 /* Extensions.swift */; };
 		8A37F175201E37E400B13137 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F174201E37E400B13137 /* PhotoCollectionViewCell.swift */; };
+		8A37F17A201E4A4100B13137 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F179201E4A4100B13137 /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		8A37F170201E197F00B13137 /* PhotoResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoResponse.swift; sourceTree = "<group>"; };
 		8A37F172201E1A5D00B13137 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8A37F174201E37E400B13137 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		8A37F179201E4A4100B13137 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 				8A37F16B201DC43300B13137 /* NetworkManager.swift */,
 				8A37F172201E1A5D00B13137 /* Extensions.swift */,
 				8A37F174201E37E400B13137 /* PhotoCollectionViewCell.swift */,
+				8A37F179201E4A4100B13137 /* CoreDataStack.swift */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 				8A37F162201CFFFA00B13137 /* MapViewController.swift in Sources */,
 				8A37F150201CFED900B13137 /* AppDelegate.swift in Sources */,
 				8A37F173201E1A5D00B13137 /* Extensions.swift in Sources */,
+				8A37F17A201E4A4100B13137 /* CoreDataStack.swift in Sources */,
 				8A37F16C201DC43300B13137 /* NetworkManager.swift in Sources */,
 				8A37F16A201DAC5E00B13137 /* Constants.swift in Sources */,
 				8A37F166201D94C000B13137 /* FlickrHandler.swift in Sources */,

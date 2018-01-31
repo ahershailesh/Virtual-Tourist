@@ -19,8 +19,14 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     var photo : Photo? {
         didSet {
             guard let _ = photo else { return }
-            let image = UIImage(contentsOfFile: FlickrHandler.shared.getUrl(photo: photo!))
-            imageView.image = image
+            backgroundThread {
+                if let url = URL(string: FlickrHandler.shared.getUrl(photo: self.photo!)) {
+                    self.imageView.setImage(with: url, callBack: { [weak self] in
+                        self?.progressIndicator.isHidden = true
+                    })
+                }
+            }
+            
             progressIndicator.startAnimating()
             titleLabel.text = photo?.title
             backgroundColor = UIColor.lightGray
@@ -30,5 +36,10 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         self.layer.cornerRadius = 4
         crossButton.layer.cornerRadius = crossButton.frame.width/2
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        progressIndicator.isHidden = false
     }
 }

@@ -25,7 +25,7 @@ class FlickrHandler: NSObject {
     
     func getUrl(photo: Photo) -> String {
         let imageName = photo.id! + "_" + photo.secret! + ".jpg"
-        let url = " http://farm"+photo.farm!+".staticflickr.com/"+photo.server!+"/" + imageName
+        let url = "http://farm"+photo.farm!+".staticflickr.com/"+photo.server!+"/" + imageName
         return url
     }
     

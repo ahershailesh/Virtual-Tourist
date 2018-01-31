@@ -15,7 +15,4 @@ class Photo: NSObject {
     @objc var server : String?
     @objc var farm : String?
     @objc var title : String?
-    @objc var ispublic : String?
-    @objc var isfriend : String?
-    @objc var isfamily : String?
 }
