@@ -8,18 +8,9 @@
 
 import UIKit
 
-protocol PhotoDelegate {
-    func photoLoaded(photo: [Photo])
-}
-
 class PhotoHandler: NSObject {
-
-    var photos : [Photo]?
-    var delegate : PhotoDelegate?
     
-    override init() {
-        super.init()
-    }
+    var photos : [PhotoModel]?
     
     //MARK:- private methods
     
@@ -28,20 +19,7 @@ class PhotoHandler: NSObject {
         
     }
     
-    func getPhotosByLocation(latitude lat: Double, longitude long: Double) {
-        FlickrHandler.shared.getPhotoByLocation(lat: lat, long: long)  { (success, response, error) in
-            if let dict = response as? [String : Any] {
-                if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
-                    let photos = array.map({ (dict) -> Photo in
-                        let photo = Photo()
-                        photo.map(dictionary: dict)
-                        photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
-                        return photo
-                    })
-                    self.photos = photos
-                    self.delegate?.photoLoaded(photo: photos)
-                }
-            }
-        }
+    func getPhotosByLocation(latitude lat: Double, longitude long: Double, completionBlock: Constants.CompletionBlock?) {
+        FlickrHandler.shared.getPhotoByLocation(lat: lat, long: long, completionBlock: completionBlock)
     }
 }

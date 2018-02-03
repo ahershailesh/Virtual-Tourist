@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class FlickrHandler: NSObject {
 
@@ -20,15 +21,83 @@ class FlickrHandler: NSObject {
     
     func getPhotoByLocation(lat: Double, long : Double, completionBlock: Constants.CompletionBlock?) {
         let queryParam = ["lat" : String(lat), "lon" : String(long), "method" : "flickr.photos.search"]
-        networkManager.get(queryParam: queryParam, completionBlock: completionBlock)
+        let savedLocation = getLocation(dict: ["lat" : lat, "long" : long, "locationName" : "myLocation"])
+        
+        let ceo = CLGeocoder()
+        let loc = CLLocation(latitude: lat, longitude: long)
+        
+        ceo.reverseGeocodeLocation(loc) { (placemarks, error) in
+            if let placemark = placemarks?.first {
+                print(placemark.addressDictionary)
+                let name = placemark.name ?? "--"
+                let city = placemark.locality ?? "--"
+                savedLocation.locationName = name + ", " + city
+            }
+        }
+       
+        networkManager.get(queryParam: queryParam) { (success, response, error) in
+            
+            if let dict = response as? [String : Any] {
+                if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
+                    let photos = array.map({ (dict) -> PhotoModel in
+                        let photo = PhotoModel()
+                        photo.map(dictionary: dict)
+                        photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
+                        return photo
+                    })
+                    let result = self.getPicturesResult(dict: diction)
+                    savedLocation.addToPictureResult(result)
+                    backgroundThread {
+                        photos.forEach({ (photo) in
+                            let picture = self.getPict(photoModel: photo)
+                            result.addToPic(picture)
+                        })
+                    }
+                    completionBlock?(success, result, error)
+                }
+            }
+            completionBlock?(false, nil, error)
+        }
     }
     
-    func getUrl(photo: Photo) -> String {
+    func getLocation(dict: [AnyHashable: Any]) -> Location {
+        let lat = dict["lat"] as! Double
+        let long = dict["long"] as! Double
+        let locationName = dict["locationName"] as! String
+        let location = Location(lat: lat, long: long, locationName: locationName, contenxt: appDelegate.coreDataStack.context!)
+        
+        print(location)
+        return location
+    }
+    
+    func getPicturesResult(dict: [AnyHashable: Any]) -> PicturesResult {
+        let thisDict = dict.filter { (key, value) -> Bool in
+            if let keyString = key as? String, keyString != "photo" {
+                return true
+            }
+            return false
+        }
+        let pictureResult = PicturesResult(dict: thisDict, contenxt: appDelegate.coreDataStack.context!)
+        print(pictureResult)
+        return pictureResult
+    }
+    
+    func getPict(photoModel: PhotoModel) -> Picture {
+        let link = FlickrHandler.shared.getUrlString(photo: photoModel)
+        let model = Picture(link: link, contenxt: appDelegate.coreDataStack.context!)
+        return model
+    }
+    
+    func getUrlString(photo: PhotoModel) -> String {
         let imageName = photo.id! + "_" + photo.secret! + ".jpg"
         let url = "http://farm"+photo.farm!+".staticflickr.com/"+photo.server!+"/" + imageName
         return url
     }
     
+    func getImage(fromUrl url : String, completionBlock: Constants.CompletionBlock?) {
+        networkManager.getData(urlString: url, completionBlock: completionBlock)
+    }
+
 }
 
 extension FlickrHandler : NetworkProtocol {

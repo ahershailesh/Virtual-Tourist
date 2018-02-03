@@ -58,5 +58,21 @@ class NetworkManager: NSObject {
         }
     }
     
+    func getData(urlString: String, completionBlock: Constants.CompletionBlock?) {
+//        if let url = URL(string: urlString) {
+//            let session = URLSession.shared
+//            session.dataTask(with: url, completionHandler: { (data, response, error) in
+//                let success =  error == nil
+//                completionBlock?(success, data, error)
+//            })
+//        }
+        print("Downloading image from url = "+urlString)
+        if let url = URL(string: urlString) {
+            backgroundThread {
+                let data = NSData(contentsOf: url)
+                completionBlock?(true, data, nil)
+            }
+        }
+    }
     
 }

@@ -50,9 +50,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController, let annotation = view.annotation {
-            albumViewController.lat =  annotation.coordinate.latitude
-            albumViewController.long = annotation.coordinate.longitude
-            navigationController?.pushViewController(albumViewController, animated: true)
+            let handler = PhotoHandler()
+            handler.getPhotosByLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude, completionBlock: { [weak self] (success, response, _) in
+                if success {
+                    albumViewController.picturesResult = response as? PicturesResult
+                    self?.navigationController?.pushViewController(albumViewController, animated: true)
+                } else {
+                    print("cannot able to load images")
+                }
+            })
         }
     }
 }

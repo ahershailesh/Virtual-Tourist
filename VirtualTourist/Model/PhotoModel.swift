@@ -1,14 +1,14 @@
 //
-//  Photo.swift
+//  PhotoModel.swift
 //  VirtualTourist
 //
-//  Created by Shailesh Aher on 1/28/18.
+//  Created by Shailesh Aher on 2/3/18.
 //  Copyright © 2018 Shailesh Aher. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class Photo: NSObject {
+class PhotoModel : NSObject {
     @objc var id : String?
     @objc var owner : String?
     @objc var secret : String?
