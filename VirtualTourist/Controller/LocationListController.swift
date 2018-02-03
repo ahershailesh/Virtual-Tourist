@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class PreviousLocationController: TableViewController {
+class LocationListController: TableViewController {
     
     let reuseIdentifier = "UITableViewCell"
 

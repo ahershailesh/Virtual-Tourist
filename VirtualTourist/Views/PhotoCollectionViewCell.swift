@@ -50,7 +50,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
                             self?.progressIndicator.isHidden = true
                         }
                     } else {
-                        print("Caanot able to save pic for link = \(picture.link!)")
+                        saveLog("Caanot able to save pic for link = \(picture.link!)")
                     }
                 })
                 return
@@ -68,5 +68,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         progressIndicator.isHidden = false
+        imageView.image = nil
     }
 }

@@ -55,7 +55,7 @@ class FlickrHandler: NSObject {
         let locationName = dict["locationName"] as! String
         let location = Location(lat: lat, long: long, locationName: locationName, contenxt: appDelegate.coreDataStack.context!)
         
-        print(location)
+        saveLog(location)
         return location
     }
     
@@ -67,7 +67,7 @@ class FlickrHandler: NSObject {
             return false
         }
         let pictureResult = PicturesResult(dict: thisDict, contenxt: appDelegate.coreDataStack.context!)
-        print(pictureResult)
+        saveLog(pictureResult)
         return pictureResult
     }
     

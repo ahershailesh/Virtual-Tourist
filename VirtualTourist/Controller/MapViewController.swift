@@ -38,15 +38,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         ceo.reverseGeocodeLocation(loc) { [weak self] (placemarks, error) in
             if let placemark = placemarks?.first {
-                print(placemark.addressDictionary)
+                saveLog(placemark.addressDictionary)
                 let name = placemark.name ?? "--"
                 let city = placemark.locality ?? "--"
                 annotation.title = name + ", " + city
                 self?.mapView.addAnnotation(annotation)
             }
         }
-        
-        print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
     }
     
     // MARK: - MKMapViewDelegate
@@ -62,8 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController, let annotation = view.annotation {
             
-            let handler = PhotoHandler()
-            handler.getPhotosByLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, _) in
+            FlickrHandler.shared.getPhotoByLocation(lat: annotation.coordinate.latitude, long: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, _) in
                 if success {
                     if let response = response as? PicturesResult {
                         albumViewController.picturesResult = response
@@ -72,11 +69,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                         }
                     } else {
                         mainThread {
-                            self?.showAlert(message: "This Location has no pics")
+                            self?.showAlert(message: "This location has no pictures")
                         }
                     }
                 } else {
-                    print("cannot able to load images")
+                    saveLog("cannot able to load images")
                 }
             })
         }

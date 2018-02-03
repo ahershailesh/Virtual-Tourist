@@ -35,7 +35,7 @@ class NetworkManager: NSObject {
         url = url + "&" + (queryParam?.map { (key, value) -> String in
             return key + "=" + value
             }.joined(separator: "&") ?? "")
-        
+        saveLog(url)
         if let thisUrl = URL(string: url) {
             let request = URLRequest(url: thisUrl)
             let urlSession = URLSession.shared
@@ -59,7 +59,7 @@ class NetworkManager: NSObject {
     }
     
     func getData(urlString: String, completionBlock: Constants.CompletionBlock?) {
-        print("Downloading image from url = "+urlString)
+        saveLog("Downloading image from url = "+urlString)
         if let url = URL(string: urlString) {
             backgroundThread {
                 let data = NSData(contentsOf: url)

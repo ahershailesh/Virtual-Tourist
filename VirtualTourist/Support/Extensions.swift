@@ -23,19 +23,6 @@ extension NSObject {
     }
 }
 
-extension UIImageView {
-    func setImage(with url : URL, callBack: Constants.VoidBlock? = nil) {
-        backgroundThread {
-            if let data = try? Data(contentsOf: url) {
-                mainThread(block: {
-                    self.image = UIImage(data: data)
-                    callBack?()
-                })
-            }
-        }
-    }
-}
-
 extension UIViewController {
     
     func showAlert(message: String) {

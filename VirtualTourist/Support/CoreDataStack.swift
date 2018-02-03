@@ -19,13 +19,13 @@ class CoreDataStack: NSObject {
     init(modelName: String) {
         super.init()
         guard let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd") else {
-            print("unable to fetch model url")
+            saveLog("unable to fetch model url")
             return
         }
         self.modelURL = modelURL
         
         guard let model =  NSManagedObjectModel(contentsOf: modelURL) else {
-            print("unable to fetch model")
+            saveLog("unable to fetch model")
             return
         }
         self.model = model
@@ -36,16 +36,16 @@ class CoreDataStack: NSObject {
         
         let fm = FileManager.default
         guard  let docUrl = fm.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("unable to reach to the document folder")
+            saveLog("unable to reach to the document folder")
             return
         }
         
         let dbUrl = docUrl.appendingPathExtension("model.sqlite")
-        print("db path : " + dbUrl.absoluteString)
+        saveLog("db path : " + dbUrl.absoluteString)
         do {
             try coordinator?.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: dbUrl, options: nil)
         } catch {
-            print("unable to add store")
+            saveLog("unable to add store")
         }
         self.dbUrl = dbUrl
     }
@@ -55,7 +55,7 @@ class CoreDataStack: NSObject {
             do {
                 try context?.save()
             } catch {
-                print("unable to save context")
+                saveLog("unable to save context")
             }
         }
     }
