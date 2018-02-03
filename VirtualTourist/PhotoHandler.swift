@@ -19,7 +19,7 @@ class PhotoHandler: NSObject {
         
     }
     
-    func getPhotosByLocation(latitude lat: Double, longitude long: Double, completionBlock: Constants.CompletionBlock?) {
-        FlickrHandler.shared.getPhotoByLocation(lat: lat, long: long, completionBlock: completionBlock)
+    func getPhotosByLocation(latitude lat: Double, longitude long: Double, locationName: String, completionBlock: Constants.CompletionBlock?) {
+        FlickrHandler.shared.getPhotoByLocation(lat: lat, long: long,locationName: locationName, completionBlock: completionBlock)
     }
 }

@@ -36,7 +36,7 @@ func mainThread(block : Constants.VoidBlock?) {
 }
 
 func backgroundThread(block : Constants.VoidBlock?) {
-    DispatchQueue.main.async {
+    DispatchQueue.global(qos: .background).async {
         block?()
     }
 }

@@ -31,9 +31,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         let annotation = MKPointAnnotation()
         annotation.coordinate = locationCoordinate
-        annotation.title = "title"
-        annotation.subtitle = "subtitle"
-        mapView.addAnnotation(annotation)
+        annotation.subtitle = ""
+        
+        let ceo = CLGeocoder()
+        let loc = CLLocation(latitude: locationCoordinate.latitude, longitude:locationCoordinate.longitude)
+        
+        ceo.reverseGeocodeLocation(loc) { [weak self] (placemarks, error) in
+            if let placemark = placemarks?.first {
+                print(placemark.addressDictionary)
+                let name = placemark.name ?? "--"
+                let city = placemark.locality ?? "--"
+                annotation.title = name + ", " + city
+                self?.mapView.addAnnotation(annotation)
+            }
+        }
         
         print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
     }
@@ -50,11 +61,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController, let annotation = view.annotation {
+            
             let handler = PhotoHandler()
-            handler.getPhotosByLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude, completionBlock: { [weak self] (success, response, _) in
+            handler.getPhotosByLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, _) in
                 if success {
-                    albumViewController.picturesResult = response as? PicturesResult
-                    self?.navigationController?.pushViewController(albumViewController, animated: true)
+                    if let response = response as? PicturesResult {
+                        albumViewController.picturesResult = response
+                        mainThread {
+                            self?.navigationController?.pushViewController(albumViewController, animated: true)
+                        }
+                    } else {
+                        mainThread {
+                            self?.showAlert(message: "This Location has no pics")
+                        }
+                    }
                 } else {
                     print("cannot able to load images")
                 }

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import MapKit
 
 class FlickrHandler: NSObject {
 
@@ -19,25 +18,14 @@ class FlickrHandler: NSObject {
         networkManager.delegate = self
     }
     
-    func getPhotoByLocation(lat: Double, long : Double, completionBlock: Constants.CompletionBlock?) {
+    func getPhotoByLocation(lat: Double, long : Double, locationName: String, completionBlock: Constants.CompletionBlock?) {
         let queryParam = ["lat" : String(lat), "lon" : String(long), "method" : "flickr.photos.search"]
-        let savedLocation = getLocation(dict: ["lat" : lat, "long" : long, "locationName" : "myLocation"])
-        
-        let ceo = CLGeocoder()
-        let loc = CLLocation(latitude: lat, longitude: long)
-        
-        ceo.reverseGeocodeLocation(loc) { (placemarks, error) in
-            if let placemark = placemarks?.first {
-                print(placemark.addressDictionary)
-                let name = placemark.name ?? "--"
-                let city = placemark.locality ?? "--"
-                savedLocation.locationName = name + ", " + city
-            }
-        }
-       
+        let savedLocation = getLocation(dict: ["lat" : lat, "long" : long, "locationName" : locationName])
         networkManager.get(queryParam: queryParam) { (success, response, error) in
             
-            if let dict = response as? [String : Any] {
+            var result : PicturesResult?
+            
+            if success, let dict = response as? [String : Any] {
                 if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
                     let photos = array.map({ (dict) -> PhotoModel in
                         let photo = PhotoModel()
@@ -45,18 +33,19 @@ class FlickrHandler: NSObject {
                         photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
                         return photo
                     })
-                    let result = self.getPicturesResult(dict: diction)
-                    savedLocation.addToPictureResult(result)
-                    backgroundThread {
+                    result = self.getPicturesResult(dict: diction)
+                    savedLocation.addToPictureResult(result!)
+                    if photos.isEmpty {
+                        result = nil
+                    } else {
                         photos.forEach({ (photo) in
                             let picture = self.getPict(photoModel: photo)
-                            result.addToPic(picture)
+                            result?.addToPic(picture)
                         })
                     }
-                    completionBlock?(success, result, error)
                 }
             }
-            completionBlock?(false, nil, error)
+            completionBlock?(success, result, error)
         }
     }
     
