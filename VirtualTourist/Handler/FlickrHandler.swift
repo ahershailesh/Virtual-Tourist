@@ -34,7 +34,7 @@ class FlickrHandler: NSObject {
                         return photo
                     })
                     result = self.getPicturesResult(dict: diction)
-                    savedLocation.addToPictureResult(result!)
+                    savedLocation.pictureResult = result
                     if photos.isEmpty {
                         result = nil
                     } else {
@@ -73,7 +73,8 @@ class FlickrHandler: NSObject {
     
     func getPict(photoModel: PhotoModel) -> Picture {
         let link = FlickrHandler.shared.getUrlString(photo: photoModel)
-        let model = Picture(link: link, contenxt: appDelegate.coreDataStack.context!)
+        let title = photoModel.title
+        let model = Picture(link: link, title: title ?? "-" , contenxt: appDelegate.coreDataStack.context!)
         return model
     }
     

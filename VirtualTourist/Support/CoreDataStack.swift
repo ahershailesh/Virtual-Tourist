@@ -31,7 +31,7 @@ class CoreDataStack: NSObject {
         self.model = model
         self.coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         
-        self.context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        self.context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context?.persistentStoreCoordinator = coordinator
         
         let fm = FileManager.default

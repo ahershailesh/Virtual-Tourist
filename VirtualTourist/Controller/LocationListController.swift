@@ -19,7 +19,7 @@ class LocationListController: TableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "locationName", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "locationName", ascending: true), NSSortDescriptor(key: "createdDate", ascending: true)]
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate.coreDataStack.context!, sectionNameKeyPath: nil, cacheName: nil)
         requestHandler = controller
@@ -44,7 +44,7 @@ class LocationListController: TableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let location = requestHandler?.object(at: indexPath) as? Location {
-            if let result = location.pictureResult?.allObjects.first as? PicturesResult {
+            if let result = location.pictureResult {
                 if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
                     albumViewController.picturesResult = result
                     navigationController?.pushViewController(albumViewController, animated: true)

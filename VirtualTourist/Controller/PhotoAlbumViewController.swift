@@ -14,6 +14,14 @@ private let reuseIdentifier = "PhotoCell"
 class PhotoAlbumViewController: UICollectionViewController {
     
     var picturesResult : PicturesResult?
+    let numberOfItems = 3
+    let margin : CGFloat = 8
+    let internalSpacing : CGFloat = 4
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView?.delegate = self
+    }
     
     // MARK: UICollectionViewDataSource
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -34,18 +42,20 @@ class PhotoAlbumViewController: UICollectionViewController {
 extension PhotoAlbumViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 180, height: 180)
+        let width = UIScreen.main.bounds.width
+        let spacificWidth = (width - (2*margin + internalSpacing * CGFloat(numberOfItems - 1)))/CGFloat(numberOfItems)
+        return CGSize(width: spacificWidth, height: spacificWidth)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        return UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return internalSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
+        return internalSpacing
     }
 }

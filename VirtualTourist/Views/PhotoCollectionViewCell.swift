@@ -19,13 +19,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     var photo : PhotoModel? {
         didSet {
             guard let photo = photo else { return }
-            
-//            if let url = URL(string: FlickrHandler.shared.getUrlString(photo: photo)) {
-//                self.imageView.setImage(with: url, callBack: { [weak self] in
-//                    self?.progressIndicator.isHidden = true
-//                })
-//            }
-            
             progressIndicator.startAnimating()
             titleLabel.text = photo.title
             backgroundColor = UIColor.lightGray
@@ -40,7 +33,8 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             backgroundColor = UIColor.lightGray
             progressIndicator.isHidden = false
             crossButton.backgroundColor = UIColor.lightGray
-            titleLabel.text = picture.link
+            titleLabel.text = picture.title
+            
             guard let imageData = picture.pic  else {
                 FlickrHandler.shared.getImage(fromUrl: picture.link!, completionBlock: { [weak self] (success, response, error) in
                     if success , let data = response as? Data {

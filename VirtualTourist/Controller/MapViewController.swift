@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController: UIViewController, MKMapViewDelegate {
     
@@ -15,6 +16,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // is set up as the map view's delegate.
     @IBOutlet weak var mapView: MKMapView!
     var locationBlock : (() -> AnyObject)?
+    var result : MapResult?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +25,52 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
         singleTapRecognizer.delegate = self
         mapView.addGestureRecognizer(singleTapRecognizer)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let thisResult = getSavedMapView() else {
+            return
+        }
+        setupRegion(model: thisResult)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveMapLocation()
+    }
+    
+    private func setupRegion(model: MapResult) {
+        result = model
+        let centerCoordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(model.centerX), longitude: CLLocationDegrees(model.centerY))
+        mapView.setCenter(centerCoordinate, animated: true)
+        mapView.camera.altitude = CLLocationDistance(model.zoomLevel)
+    }
+    
+    private func getSavedMapView() -> MapResult? {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MapResult")
+        request.fetchLimit = 1
+        let objectArray = try? appDelegate.coreDataStack.context?.fetch(request)
+        var mapResult : MapResult?
+        if let objects =  objectArray as? [MapResult] {
+            mapResult = objects.first
+        }
+        return mapResult
+    }
+    
+    
+    private func saveMapLocation() {
+        let centerX = mapView.centerCoordinate.latitude
+        let centerY = mapView.centerCoordinate.longitude
+        let zoomLevel = mapView.camera.altitude
+        if let thisResult = result {
+            thisResult.centerX = Float(centerX)
+            thisResult.centerY = Float(centerY)
+            thisResult.zoomLevel = Int64(zoomLevel)
+        } else {
+            _ = MapResult(centerX: Float(centerX), centerY: Float(centerY), zoomLevel: Int64(zoomLevel), context: appDelegate.coreDataStack.context!)
+        }
+        try? appDelegate.coreDataStack.context?.save()
     }
     
     @objc func foundTap(sender: UITapGestureRecognizer) {

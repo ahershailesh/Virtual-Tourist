@@ -2,7 +2,7 @@
 //  Location+CoreDataClass.swift
 //  VirtualTourist
 //
-//  Created by Shailesh Aher on 2/3/18.
+//  Created by Shailesh Aher on 2/4/18.
 //  Copyright © 2018 Shailesh Aher. All rights reserved.
 //
 //
@@ -18,6 +18,7 @@ public class Location: NSManagedObject {
             self.locationName = locationName
             self.lat = lat
             self.long = long
+            self.createdDate = NSDate()
         } else {
             fatalError("cannot able to fetch Location")
         }
