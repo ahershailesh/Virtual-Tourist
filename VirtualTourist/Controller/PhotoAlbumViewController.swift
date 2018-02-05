@@ -23,33 +23,30 @@ class PhotoAlbumViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.delegate = self
-        
-        editButtonItem.action =  #selector(editPics)
-        navigationItem.rightBarButtonItem = editButtonItem
+
         
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteImages))
         
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refresh))
+        let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(loadNewImages))
         
         setToolbarItems([deleteButton,spacer, refreshButton], animated: true)
         
         self.navigationController?.isToolbarHidden = false
     }
     
-    @objc func editPics() {
-        isEditing = !isEditing
-        self.navigationController?.isToolbarHidden = !isEditing
-    }
-    
-    @objc func refresh() {
+    @objc func loadNewImages() {
         if let thisLocation = location {
             FlickrHandler.shared.fetchNewSet(forLocation: thisLocation, completionBlock: { [weak self] (success, response, error) in
                 if success, let locationObj = response as? Location {
                     self?.location = locationObj
                 }
                 mainThread {
-                    self?.collectionView?.reloadData()
+                    if success {
+                        self?.collectionView?.reloadData()
+                    } else {
+                        self?.showAlert(message: "No new set of images are available")
+                    }
                 }
             })
         }
