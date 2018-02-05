@@ -38,7 +38,9 @@ class FlickrHandler: NSObject {
                     photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
                     return photo
                 })
-                location.pictureResult = self.getPicturesResult(dict: diction)
+                
+                location.pictureResult = !photos.isEmpty ? self.getPicturesResult(dict: diction) : nil
+                
                 photos.forEach({ (photo) in
                     let picture = self.getPict(photoModel: photo)
                     location.pictureResult?.addToPic(picture)

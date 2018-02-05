@@ -56,7 +56,6 @@ class PhotoAlbumViewController: UICollectionViewController {
     }
     
     @objc func deleteImages() {
-        
         let mutableSet = location?.pictureResult?.pic?.mutableCopy() as? NSMutableSet
         for indexPath in checkList {
             if let pic = location?.pictureResult?.pic?.allObjects[indexPath.row] as? Picture {
@@ -67,10 +66,6 @@ class PhotoAlbumViewController: UICollectionViewController {
         appDelegate.coreDataStack.save()
         collectionView?.deleteItems(at: checkList)
         checkList.removeAll()
-    }
-    
-    func fetchLocation() {
-        
     }
     
     // MARK: UICollectionViewDataSource
