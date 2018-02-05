@@ -22,6 +22,8 @@
 		8A37F17D202223DF00B13137 /* Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8A37F17B202223DF00B13137 /* Tourist.xcdatamodeld */; };
 		8A47D02920270D2C00F1C509 /* MapResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47D02720270D2C00F1C509 /* MapResult+CoreDataClass.swift */; };
 		8A47D02A20270D2C00F1C509 /* MapResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47D02820270D2C00F1C509 /* MapResult+CoreDataProperties.swift */; };
+		8A47D02D20277F2200F1C509 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A47D02B20277F2200F1C509 /* LocationListCell.swift */; };
+		8A47D02E20277F2200F1C509 /* LocationListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A47D02C20277F2200F1C509 /* LocationListCell.xib */; };
 		8A82A1152025A79A00FE37F4 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A1142025A79A00FE37F4 /* TableViewController.swift */; };
 		8A82A1202025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A11A2025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift */; };
 		8A82A1212025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A11B2025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift */; };
@@ -51,6 +53,8 @@
 		8A37F17C202223DF00B13137 /* Tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tourist.xcdatamodel; sourceTree = "<group>"; };
 		8A47D02720270D2C00F1C509 /* MapResult+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapResult+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8A47D02820270D2C00F1C509 /* MapResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		8A47D02B20277F2200F1C509 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
+		8A47D02C20277F2200F1C509 /* LocationListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LocationListCell.xib; sourceTree = "<group>"; };
 		8A82A1142025A79A00FE37F4 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		8A82A11A2025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PicturesResult+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8A82A11B2025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PicturesResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				8A37F158201CFED900B13137 /* LaunchScreen.storyboard */,
 				8A37F153201CFED900B13137 /* Main.storyboard */,
 				8A37F174201E37E400B13137 /* PhotoCollectionViewCell.swift */,
+				8A47D02B20277F2200F1C509 /* LocationListCell.swift */,
+				8A47D02C20277F2200F1C509 /* LocationListCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -230,6 +236,7 @@
 			files = (
 				8A37F15A201CFED900B13137 /* LaunchScreen.storyboard in Resources */,
 				8A37F157201CFED900B13137 /* Assets.xcassets in Resources */,
+				8A47D02E20277F2200F1C509 /* LocationListCell.xib in Resources */,
 				8A37F155201CFED900B13137 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,6 +258,7 @@
 				8AED6A912026509900D764A4 /* Location+CoreDataClass.swift in Sources */,
 				8A37F17A201E4A4100B13137 /* CoreDataStack.swift in Sources */,
 				8AED6A952026ED8E00D764A4 /* Picture+CoreDataClass.swift in Sources */,
+				8A47D02D20277F2200F1C509 /* LocationListCell.swift in Sources */,
 				8A37F16C201DC43300B13137 /* NetworkManager.swift in Sources */,
 				8A37F16A201DAC5E00B13137 /* Constants.swift in Sources */,
 				8AED6A922026509900D764A4 /* Location+CoreDataProperties.swift in Sources */,

@@ -25,6 +25,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
         singleTapRecognizer.delegate = self
         mapView.addGestureRecognizer(singleTapRecognizer)
+        
+        title = "Add Location"
     }
     
     override func viewWillAppear(_ animated: Bool) {
