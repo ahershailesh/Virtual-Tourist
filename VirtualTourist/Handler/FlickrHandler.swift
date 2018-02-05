@@ -18,34 +18,41 @@ class FlickrHandler: NSObject {
         networkManager.delegate = self
     }
     
-    func getPhotoByLocation(lat: Double, long : Double, locationName: String, completionBlock: Constants.CompletionBlock?) {
-        let queryParam = ["lat" : String(lat), "lon" : String(long), "method" : "flickr.photos.search"]
-        let savedLocation = getLocation(dict: ["lat" : lat, "long" : long, "locationName" : locationName])
-        networkManager.get(queryParam: queryParam) { (success, response, error) in
-            
-            var result : PicturesResult?
-            
-            if success, let dict = response as? [String : Any] {
-                if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
-                    let photos = array.map({ (dict) -> PhotoModel in
-                        let photo = PhotoModel()
-                        photo.map(dictionary: dict)
-                        photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
-                        return photo
-                    })
-                    result = self.getPicturesResult(dict: diction)
-                    savedLocation.pictureResult = result
-                    if photos.isEmpty {
-                        result = nil
-                    } else {
-                        photos.forEach({ (photo) in
-                            let picture = self.getPict(photoModel: photo)
-                            result?.addToPic(picture)
-                        })
-                    }
-                }
+    func getPhotoByLocation(lat: Double, long : Double, locationName: String, page : String = "1", location: Location? = nil, completionBlock: Constants.CompletionBlock?) {
+        let queryParam = ["lat" : String(lat), "lon" : String(long),  "page" : page, "method" : "flickr.photos.search"]
+        var savedLocation = location ?? getLocation(dict: ["lat" : lat, "long" : long, "locationName" : locationName])
+        networkManager.get(queryParam: queryParam) { [weak self] (success, response, error) in
+            if success, let thisResponse = response {
+                self?.parseLocationResponse(response: thisResponse, location: &savedLocation)
             }
-            completionBlock?(success, result, error)
+            completionBlock?(success, savedLocation, error)
+        }
+    }
+    
+    private func parseLocationResponse(response: Any, location: inout Location) {
+        if let dict = response as? [String : Any] {
+            if let diction = dict["photos"] as? [String: Any], let array = diction["photo"] as? [[String: Any]] {
+                let photos = array.map({ (dict) -> PhotoModel in
+                    let photo = PhotoModel()
+                    photo.map(dictionary: dict)
+                    photo.farm = (dict["farm"] as?  NSNumber)?.stringValue
+                    return photo
+                })
+                location.pictureResult = self.getPicturesResult(dict: diction)
+                photos.forEach({ (photo) in
+                    let picture = self.getPict(photoModel: photo)
+                    location.pictureResult?.addToPic(picture)
+                })
+            }
+        }
+    }
+    
+    func fetchNewSet(forLocation location: Location, completionBlock: Constants.CompletionBlock?) {
+        if let currentPage = Int(location.pictureResult?.page ?? ""), let totalPages = Int(location.pictureResult?.pages ?? ""),
+            currentPage < totalPages {
+            getPhotoByLocation(lat: location.lat, long: location.long, locationName: location.locationName!, page: "\(currentPage + 1)", location: location, completionBlock: completionBlock)
+        } else {
+            completionBlock?(false, nil, nil)
         }
     }
     

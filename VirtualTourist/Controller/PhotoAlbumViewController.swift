@@ -13,7 +13,7 @@ private let reuseIdentifier = "PhotoCell"
 
 class PhotoAlbumViewController: UICollectionViewController {
     
-    var picturesResult : PicturesResult?
+    var location : Location?
     let numberOfItems = 3
     let margin : CGFloat = 8
     let internalSpacing : CGFloat = 4
@@ -43,18 +43,34 @@ class PhotoAlbumViewController: UICollectionViewController {
     }
     
     @objc func refresh() {
-        
+        if let thisLocation = location {
+            FlickrHandler.shared.fetchNewSet(forLocation: thisLocation, completionBlock: { [weak self] (success, response, error) in
+                if success, let locationObj = response as? Location {
+                    self?.location = locationObj
+                }
+                mainThread {
+                    self?.collectionView?.reloadData()
+                }
+            })
+        }
     }
     
     @objc func deleteImages() {
+        
+        let mutableSet = location?.pictureResult?.pic?.mutableCopy() as? NSMutableSet
         for indexPath in checkList {
-            if let pic = picturesResult?.pic?.allObjects[indexPath.row] as? Picture {
-                appDelegate.coreDataStack.context?.delete(pic)
+            if let pic = location?.pictureResult?.pic?.allObjects[indexPath.row] as? Picture {
+                mutableSet?.remove(pic)
             }
         }
+        location?.pictureResult?.pic = mutableSet?.copy() as? NSSet
         appDelegate.coreDataStack.save()
+        collectionView?.deleteItems(at: checkList)
         checkList.removeAll()
-        collectionView?.reloadData()
+    }
+    
+    func fetchLocation() {
+        
     }
     
     // MARK: UICollectionViewDataSource
@@ -63,12 +79,12 @@ class PhotoAlbumViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return picturesResult?.pic?.count ?? 0
+        return location?.pictureResult?.pic?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PhotoCollectionViewCell
-        cell.picture = picturesResult?.pic?.allObjects[indexPath.row] as? Picture
+        cell.picture = location?.pictureResult?.pic?.allObjects[indexPath.row] as? Picture
         cell.isChecked = checkList.contains(indexPath)
         return cell
     }

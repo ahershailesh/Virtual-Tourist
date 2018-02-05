@@ -112,8 +112,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             FlickrHandler.shared.getPhotoByLocation(lat: annotation.coordinate.latitude, long: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, _) in
                 if success {
-                    if let response = response as? PicturesResult {
-                        albumViewController.picturesResult = response
+                    if let response = response as? Location {
+                        albumViewController.location = response
                         mainThread {
                             self?.navigationController?.pushViewController(albumViewController, animated: true)
                         }

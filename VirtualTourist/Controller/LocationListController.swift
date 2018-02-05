@@ -18,16 +18,18 @@ class LocationListController: TableViewController {
         
         tableView.register(UINib(nibName: "LocationListCell", bundle: nil), forCellReuseIdentifier: reuseIdentifier)
         
+        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocation))
+        navigationItem.rightBarButtonItem = rightButton
+        
+        title = "Saved Location"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "locationName", ascending: true), NSSortDescriptor(key: "createdDate", ascending: true)]
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate.coreDataStack.context!, sectionNameKeyPath: nil, cacheName: nil)
         requestHandler = controller
-        
-        let rightButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocation))
-        navigationItem.rightBarButtonItem = rightButton
-        
-        title = "Saved Location"
     }
     
     @objc func addLocation() {
@@ -49,12 +51,11 @@ class LocationListController: TableViewController {
             if (location.pictureResult?.pic?.count ?? 0 == 0) {
                 showAlert(message: "This location has no pictures")
             } else {
-                if let result = location.pictureResult {
-                    if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
-                        albumViewController.picturesResult = result
-                        navigationController?.pushViewController(albumViewController, animated: true)
-                    }
+                if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
+                    albumViewController.location = location
+                    navigationController?.pushViewController(albumViewController, animated: true)
                 }
+                
             }
         }
     }
