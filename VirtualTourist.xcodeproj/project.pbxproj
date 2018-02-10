@@ -28,6 +28,7 @@
 		8A82A1202025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A11A2025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift */; };
 		8A82A1212025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A11B2025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift */; };
 		8A82A1262025B9FC00FE37F4 /* PhotoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A82A1252025B9FC00FE37F4 /* PhotoModel.swift */; };
+		8AB3A657202F6AFE00373D76 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB3A656202F6AFE00373D76 /* CoreData.framework */; };
 		8AED6A8620264A0C00D764A4 /* LocationListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED6A8520264A0C00D764A4 /* LocationListController.swift */; };
 		8AED6A912026509900D764A4 /* Location+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED6A8F2026509900D764A4 /* Location+CoreDataClass.swift */; };
 		8AED6A922026509900D764A4 /* Location+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AED6A902026509900D764A4 /* Location+CoreDataProperties.swift */; };
@@ -59,6 +60,7 @@
 		8A82A11A2025B3A200FE37F4 /* PicturesResult+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PicturesResult+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8A82A11B2025B3A200FE37F4 /* PicturesResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PicturesResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		8A82A1252025B9FC00FE37F4 /* PhotoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoModel.swift; sourceTree = "<group>"; };
+		8AB3A656202F6AFE00373D76 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		8AED6A8520264A0C00D764A4 /* LocationListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationListController.swift; sourceTree = "<group>"; };
 		8AED6A8F2026509900D764A4 /* Location+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataClass.swift"; sourceTree = "<group>"; };
 		8AED6A902026509900D764A4 /* Location+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Location+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AB3A657202F6AFE00373D76 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +85,7 @@
 			children = (
 				8A37F14E201CFED900B13137 /* VirtualTourist */,
 				8A37F14D201CFED900B13137 /* Products */,
+				8AB3A655202F6AFD00373D76 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -130,6 +134,14 @@
 				8A82A1252025B9FC00FE37F4 /* PhotoModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		8AB3A655202F6AFD00373D76 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8AB3A656202F6AFE00373D76 /* CoreData.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		8AED6A8720264AE900D764A4 /* Controller */ = {
@@ -409,8 +421,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UFPXYFK948;
 				INFOPLIST_FILE = VirtualTourist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.VirtualTourist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.VirtualTourist123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -424,8 +437,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UFPXYFK948;
 				INFOPLIST_FILE = VirtualTourist/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.VirtualTourist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.udacity.VirtualTourist123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -25,12 +25,57 @@ extension NSObject {
 
 extension UIViewController {
     
-    func showAlert(message: String) {
-        let controller = UIAlertController(title: "Important", message: message, preferredStyle: .alert)
+    func showAlert(message: String, title : String = "Important" ) {
+        let controller = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Ok", style: .cancel) { (_) in
             controller.dismiss(animated: true, completion: nil)
         }
         controller.addAction(okAction)
         present(controller, animated: true, completion: nil)
+    }
+
+    func show(error : Error?, title : String = "Error"){
+        guard let error = error else {
+            return
+        }
+        showAlert(message: get(error).rawValue, title: "Error")
+    }
+    
+    private func get(_ error : Error) -> Constants.ErrorCode{
+        
+        if let err = error as? URLError{
+            switch err.code {
+            case URLError.Code.notConnectedToInternet, URLError.Code.cannotConnectToHost:
+                return Constants.ErrorCode.Network
+                
+            case URLError.Code.cannotFindHost:
+                return Constants.ErrorCode.ServerNotFound
+                
+            default:
+                return Constants.ErrorCode.None
+            }
+        }
+        return Constants.ErrorCode.None
+    }
+}
+
+extension UIColor {
+    convenience init(hex: String) {
+        let scanner = Scanner(string: hex)
+        scanner.scanLocation = 0
+        
+        var rgbValue: UInt64 = 0
+        
+        scanner.scanHexInt64(&rgbValue)
+        
+        let r = (rgbValue & 0xff0000) >> 16
+        let g = (rgbValue & 0xff00) >> 8
+        let b = rgbValue & 0xff
+        
+        self.init(
+            red: CGFloat(r) / 0xff,
+            green: CGFloat(g) / 0xff,
+            blue: CGFloat(b) / 0xff, alpha: 1
+        )
     }
 }

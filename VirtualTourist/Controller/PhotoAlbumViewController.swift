@@ -63,33 +63,49 @@ class PhotoAlbumViewController: UICollectionViewController {
     }
     
     @objc func deleteImages() {
-        let mutableSet = location?.pictureResult?.pic?.mutableCopy() as? NSMutableSet
-        for indexPath in checkList {
-            if let pic = location?.pictureResult?.pic?.allObjects[indexPath.row] as? Picture {
-                mutableSet?.remove(pic)
+        if let mutableSet = location?.pictureResult?.pic?.mutableCopy() as? NSMutableSet {
+            for indexPath in checkList {
+                if let pic = location?.pictureResult?.pic?.allObjects[indexPath.row] as? Picture {
+                    mutableSet.remove(pic)
+                }
             }
-        }
-        location?.pictureResult?.pic = mutableSet?.copy() as? NSSet
-        mainThread {
+            saveCopy(pics: mutableSet)
             appDelegate.coreDataStack.save()
-            self.collectionView?.deleteItems(at: self.checkList)
         }
-        checkList.removeAll()
+        mainThread {
+//            self.collectionView?.deleteItems(at: self.checkList)
+            self.checkList = []
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    private func saveCopy(pics: NSSet) {
+        let page = location?.pictureResult?.page ?? "0"
+        let pages = location?.pictureResult?.pages ?? "0"
+        let perpage = location?.pictureResult?.perpage ?? "0"
+        let total = location?.pictureResult?.total ?? "0"
+        let result = PicturesResult(dict: ["page" : page, "pages" : pages, "perpage" : perpage, "total" : total], contenxt: appDelegate.coreDataStack.context!)
+        result.pic = pics.copy() as? NSSet
+        location?.pictureResult = result
     }
     
     func downloadImages() {
-        for (index, picture) in (location?.pictureResult?.pic?.enumerated())! {
+        guard  let pics = location?.pictureResult?.pic, pics.count != 0 else {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        for (index, picture) in pics.enumerated() {
             if let thisPicture = picture as? Picture {
                 if thisPicture.pic == nil, let link = thisPicture.link {
                     isAllPicsLoaded = false
-                    FlickrHandler.shared.getImage(fromUrl: link, completionBlock: { (success, data, error) in
+                    FlickrHandler.shared.getImage(fromUrl: link, completionBlock: {  [weak self]  (success, data, error) in
                         if success, let dataResponse = data as? NSData {
                             thisPicture.pic = dataResponse
                             mainThread { [weak self] in
                                 self?.collectionView?.reloadItems(at: [IndexPath(row: index, section: 0)])
                             }
                         } else {
-                            fatalError("Could not able to download data " + link)
+                            self?.show(error: error)
                         }
                     })
                 } else {

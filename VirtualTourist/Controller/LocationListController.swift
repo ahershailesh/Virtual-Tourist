@@ -23,6 +23,18 @@ class LocationListController: TableViewController {
         
         title = "Saved Location"
         
+        navigationItem.leftBarButtonItem = editButtonItem
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if let location = requestHandler?.object(at: indexPath) as? Location {
+            appDelegate.coreDataStack.context?.delete(location)
+            appDelegate.coreDataStack.save()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +46,7 @@ class LocationListController: TableViewController {
     }
     
     @objc func addLocation() {
-        if let controlller = storyboard?.instantiateViewController(withIdentifier: "MapViewController") {
+        if let controlller = storyboard?.instantiateViewController(withIdentifier: "MapViewController") { 
             navigationController?.pushViewController(controlller, animated: true)
         }
     }
@@ -48,16 +60,15 @@ class LocationListController: TableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let location = requestHandler?.object(at: indexPath) as? Location {
-            if (location.pictureResult?.pic?.count ?? 0 == 0) {
-                showAlert(message: "This location has no pictures")
-            } else {
-                if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
-                    albumViewController.location = location
-                    navigationController?.pushViewController(albumViewController, animated: true)
-                }
-                
+        if let location = requestHandler?.object(at: indexPath) as? Location, let pics = location.pictureResult?.pic, pics.count != 0  {
+            
+            if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
+                albumViewController.location = location
+                navigationController?.pushViewController(albumViewController, animated: true)
             }
+            
+        } else {
+            showAlert(message: "This location has no pictures")
         }
     }
     

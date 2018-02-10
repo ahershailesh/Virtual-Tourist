@@ -35,7 +35,7 @@ class CoreDataStack: NSObject {
         context?.persistentStoreCoordinator = coordinator
         
         let fm = FileManager.default
-        guard  let docUrl = fm.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard  let docUrl = fm.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             saveLog("unable to reach to the document folder")
             return
         }
@@ -54,8 +54,8 @@ class CoreDataStack: NSObject {
         if context?.hasChanges ?? false {
             do {
                 try context?.save()
-            } catch {
-                saveLog("unable to save context")
+            } catch let error {
+                saveLog("unable to save context \(error)")
             }
         }
     }

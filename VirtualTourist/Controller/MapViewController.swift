@@ -93,6 +93,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 let city = placemark.locality ?? "--"
                 annotation.title = name + ", " + city
                 self?.mapView.addAnnotation(annotation)
+            } else {
+                self?.show(error: error)
             }
         }
     }

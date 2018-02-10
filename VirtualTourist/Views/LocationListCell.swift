@@ -31,7 +31,6 @@ class LocationListCell: UITableViewCell {
             
             if let date = location?.createdDate as Date? {
                 let formatter = DateFormatter()
-                print(date)
                 formatter.dateStyle = .medium
                 formatter.timeStyle = .none
                 dateLabel.text = formatter.string(from: date)
@@ -39,6 +38,9 @@ class LocationListCell: UITableViewCell {
             
             countLabelView.layer.cornerRadius = countLabel.frame.width/2
             selectionStyle = .none
+            
+            let color =  Constants.Color.getRandomColor()
+            countLabelView.backgroundColor = UIColor(hex: color.getString())
         }
     }
     
