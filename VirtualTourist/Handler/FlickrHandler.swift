@@ -8,14 +8,25 @@
 
 import UIKit
 
+protocol FlickrHandlerDelegate {
+    func photoLoaded()
+}
+
 class FlickrHandler: NSObject {
 
     static let shared = FlickrHandler()
     private let networkManager = NetworkManager()
+    private let group = DispatchGroup()
+    var delegate: FlickrHandlerDelegate?
     
     override init() {
         super.init()
         networkManager.delegate = self
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.delegate?.photoLoaded()
+            appDelegate.coreDataStack.save()
+        }
     }
     
     func getPhotoByLocation(lat: Double, long : Double, locationName: String, page : String = "1", location: Location? = nil, completionBlock: Constants.CompletionBlock?) {
@@ -94,9 +105,20 @@ class FlickrHandler: NSObject {
     }
     
     func getImage(fromUrl url : String, completionBlock: Constants.CompletionBlock?) {
-        networkManager.getData(urlString: url, completionBlock: completionBlock)
+        group.enter()
+        networkManager.getData(urlString: url) { [weak self] (success, response , error) in
+            self?.group.leave()
+            completionBlock?(success, response , error)
+        }
     }
 
+    func stopLoadingPhoto() {
+        group.suspend()
+        mainThread {
+            appDelegate.coreDataStack.save()
+        }
+    }
+    
 }
 
 extension FlickrHandler : NetworkProtocol {

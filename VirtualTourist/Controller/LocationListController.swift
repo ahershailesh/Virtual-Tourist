@@ -22,11 +22,12 @@ class LocationListController: TableViewController {
         navigationItem.rightBarButtonItem = rightButton
         
         title = "Saved Location"
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Location")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "locationName", ascending: true), NSSortDescriptor(key: "createdDate", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "locationName", ascending: true), NSSortDescriptor(key: "createdDate", ascending: false)]
         
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate.coreDataStack.context!, sectionNameKeyPath: nil, cacheName: nil)
         requestHandler = controller

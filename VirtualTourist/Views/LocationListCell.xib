@@ -52,13 +52,21 @@
                             <constraint firstAttribute="height" constant="36" id="z6y-QR-C1B"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v1N-PE-LDL">
+                        <rect key="frame" x="20" y="66.5" width="26.5" height="14.5"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.56284224989999998" blue="0.31881666180000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="5gg-bd-ie2" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="CgR-eh-utc"/>
                     <constraint firstItem="5gg-bd-ie2" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Fqp-BR-8AW"/>
                     <constraint firstItem="Zse-h0-7FS" firstAttribute="leading" secondItem="5gg-bd-ie2" secondAttribute="leading" id="QhZ-6j-QOc"/>
                     <constraint firstItem="z7A-55-IF3" firstAttribute="top" secondItem="Zse-h0-7FS" secondAttribute="top" id="UR9-UO-tvW"/>
+                    <constraint firstItem="v1N-PE-LDL" firstAttribute="leading" secondItem="Zse-h0-7FS" secondAttribute="leading" id="aOd-7i-1lb"/>
                     <constraint firstAttribute="bottom" secondItem="z7A-55-IF3" secondAttribute="bottom" constant="8" id="baD-Dg-79k"/>
+                    <constraint firstItem="v1N-PE-LDL" firstAttribute="top" secondItem="Zse-h0-7FS" secondAttribute="bottom" constant="2" id="gaQ-YM-9SK"/>
                     <constraint firstItem="Zse-h0-7FS" firstAttribute="top" secondItem="5gg-bd-ie2" secondAttribute="bottom" constant="4" id="k1u-OV-jwU"/>
                     <constraint firstAttribute="trailing" secondItem="z7A-55-IF3" secondAttribute="trailing" constant="8" id="pGL-cu-Mu1"/>
                     <constraint firstAttribute="trailingMargin" secondItem="5gg-bd-ie2" secondAttribute="trailing" id="sgJ-vH-UJ2"/>
@@ -68,6 +76,7 @@
             <connections>
                 <outlet property="countLabel" destination="FWz-zZ-1Iu" id="uad-dc-3Ij"/>
                 <outlet property="countLabelView" destination="z7A-55-IF3" id="8Zg-0J-YXq"/>
+                <outlet property="dateLabel" destination="v1N-PE-LDL" id="jdf-Ol-bWk"/>
                 <outlet property="subTitle" destination="Zse-h0-7FS" id="rE8-Fo-OLR"/>
                 <outlet property="title" destination="5gg-bd-ie2" id="Quy-hf-0BG"/>
             </connections>

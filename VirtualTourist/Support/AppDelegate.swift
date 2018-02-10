@@ -15,8 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let coreDataStack = CoreDataStack(modelName: "Tourist")
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        coreDataStack.autoSave(withDetay: 10)
+        // Override point for customization after application launch. 
         return true
     }
 

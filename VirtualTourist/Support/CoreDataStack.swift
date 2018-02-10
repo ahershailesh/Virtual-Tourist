@@ -59,16 +59,4 @@ class CoreDataStack: NSObject {
             }
         }
     }
-    
-    func autoSave(withDetay delay: Int) {
-        
-        save()
-        let delayTimeInNanoSeconds = UInt64(delay) * NSEC_PER_SEC
-        let time = DispatchTime.now() +   Double(UInt64(delayTimeInNanoSeconds)) / Double(NSEC_PER_SEC)
-        
-        DispatchQueue.main.asyncAfter(deadline: time) {
-            self.autoSave(withDetay: delay)
-        }
-    }
-    
 }

@@ -14,6 +14,7 @@ class LocationListCell: UITableViewCell {
     @IBOutlet weak var subTitle: UILabel!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var countLabelView: UIView!
+    @IBOutlet weak var dateLabel: UILabel!
     
     
     override func awakeFromNib() {
@@ -27,6 +28,14 @@ class LocationListCell: UITableViewCell {
             let long = location!.long
             subTitle.text = "\(lat), \(long)"
             countLabel.text = String(location?.pictureResult?.pic?.count ?? 0)
+            
+            if let date = location?.createdDate as Date? {
+                let formatter = DateFormatter()
+                print(date)
+                formatter.dateStyle = .medium
+                formatter.timeStyle = .none
+                dateLabel.text = formatter.string(from: date)
+            }
             
             countLabelView.layer.cornerRadius = countLabel.frame.width/2
             selectionStyle = .none

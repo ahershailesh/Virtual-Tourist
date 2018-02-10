@@ -17,13 +17,6 @@ public class Picture: NSManagedObject {
             self.init(entity: entityDescription, insertInto: contenxt)
             self.link = link
             self.title = title
-            FlickrHandler.shared.getImage(fromUrl: link, completionBlock: { (success, data, error) in
-                if success, let dataResponse = data as? NSData {
-                    self.pic = dataResponse
-                } else {
-                    fatalError("Could not able to download data " + link)
-                }
-            })
         } else {
             fatalError("cannot able to fetch Picture")
         }

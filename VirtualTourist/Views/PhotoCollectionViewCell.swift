@@ -46,19 +46,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             titleLabel.text = picture.title
             
             guard let imageData = picture.pic  else {
-                if let link = picture.link {
-                    FlickrHandler.shared.getImage(fromUrl: link, completionBlock: { [weak self] (success, response, error) in
-                        if success , let data = response as? Data {
-                            picture.pic = data as NSData
-                            mainThread {
-                                self?.imageView.image = UIImage(data: data)
-                                self?.progressIndicator.isHidden = true
-                            }
-                        } else {
-                            saveLog("Caanot able to save pic for link = \(picture.link!)")
-                        }
-                    })
-                }
+               progressIndicator.isHidden = false
                 return
             }
             imageView.image = UIImage(data: imageData as Data)

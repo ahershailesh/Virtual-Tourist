@@ -17,22 +17,35 @@ class PhotoAlbumViewController: UICollectionViewController {
     let numberOfItems = 3
     let margin : CGFloat = 8
     let internalSpacing : CGFloat = 4
-    
     var checkList = [IndexPath]()
+    
+    private var isAllPicsLoaded = true {
+        didSet {
+            showToolBar(isHidden: isAllPicsLoaded)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.delegate = self
 
+        backgroundThread { [weak self] in
+            self?.downloadImages()
+        }
         
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteImages))
-        
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let refreshButton = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(loadNewImages))
+        setToolbarItems([deleteButton, spacer, refreshButton], animated: true)
         
-        setToolbarItems([deleteButton,spacer, refreshButton], animated: true)
-        
-        self.navigationController?.isToolbarHidden = false
+        isAllPicsLoaded = true
+        title = location?.locationName
+        FlickrHandler.shared.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        FlickrHandler.shared.stopLoadingPhoto()
     }
     
     @objc func loadNewImages() {
@@ -40,13 +53,10 @@ class PhotoAlbumViewController: UICollectionViewController {
             FlickrHandler.shared.fetchNewSet(forLocation: thisLocation, completionBlock: { [weak self] (success, response, error) in
                 if success, let locationObj = response as? Location {
                     self?.location = locationObj
+                    self?.downloadImages()
                 }
                 mainThread {
-                    if success {
-                        self?.collectionView?.reloadData()
-                    } else {
-                        self?.showAlert(message: "No new set of images are available")
-                    }
+                    success ? self?.collectionView?.reloadData() : self?.showAlert(message: "No new set of images are available")
                 }
             })
         }
@@ -60,9 +70,42 @@ class PhotoAlbumViewController: UICollectionViewController {
             }
         }
         location?.pictureResult?.pic = mutableSet?.copy() as? NSSet
-        appDelegate.coreDataStack.save()
-        collectionView?.deleteItems(at: checkList)
+        mainThread {
+            appDelegate.coreDataStack.save()
+            self.collectionView?.deleteItems(at: self.checkList)
+        }
         checkList.removeAll()
+    }
+    
+    func downloadImages() {
+        for (index, picture) in (location?.pictureResult?.pic?.enumerated())! {
+            if let thisPicture = picture as? Picture {
+                if thisPicture.pic == nil, let link = thisPicture.link {
+                    isAllPicsLoaded = false
+                    FlickrHandler.shared.getImage(fromUrl: link, completionBlock: { (success, data, error) in
+                        if success, let dataResponse = data as? NSData {
+                            thisPicture.pic = dataResponse
+                            mainThread { [weak self] in
+                                self?.collectionView?.reloadItems(at: [IndexPath(row: index, section: 0)])
+                            }
+                        } else {
+                            fatalError("Could not able to download data " + link)
+                        }
+                    })
+                } else {
+                    mainThread { [weak self] in
+                        self?.collectionView?.reloadItems(at: [IndexPath(row: index, section: 0)])
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    func showToolBar(isHidden: Bool) {
+        mainThread { [weak self] in
+            self?.navigationController?.isToolbarHidden = !isHidden
+        }
     }
     
     // MARK: UICollectionViewDataSource
@@ -82,14 +125,16 @@ class PhotoAlbumViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! PhotoCollectionViewCell
-        if checkList.contains(indexPath) {
-            let index = checkList.index(of: indexPath)
-            checkList.remove(at: index!)
-        } else {
-            checkList.append(indexPath)
+        if isAllPicsLoaded {
+            let cell = collectionView.cellForItem(at: indexPath) as! PhotoCollectionViewCell
+            if checkList.contains(indexPath) {
+                let index = checkList.index(of: indexPath)
+                checkList.remove(at: index!)
+            } else {
+                checkList.append(indexPath)
+            }
+            cell.isChecked = checkList.contains(indexPath)
         }
-        cell.isChecked = checkList.contains(indexPath)
     }
 }
 
@@ -111,5 +156,11 @@ extension PhotoAlbumViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return internalSpacing
+    }
+}
+
+extension PhotoAlbumViewController : FlickrHandlerDelegate {
+    func photoLoaded() {
+        isAllPicsLoaded = true
     }
 }
