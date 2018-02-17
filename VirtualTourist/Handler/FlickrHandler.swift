@@ -17,16 +17,12 @@ class FlickrHandler: NSObject {
     static let shared = FlickrHandler()
     private let networkManager = NetworkManager()
     private let group = DispatchGroup()
+    private let queue = DispatchQueue(label: "Downloading Pics", qos: .background, attributes: .concurrent)
     var delegate: FlickrHandlerDelegate?
     
     override init() {
         super.init()
         networkManager.delegate = self
-        
-        group.notify(queue: .main) { [weak self] in
-            self?.delegate?.photoLoaded()
-            appDelegate.coreDataStack.save()
-        }
     }
     
     func getPhotoByLocation(lat: Double, long : Double, locationName: String, page : String = "1", location: Location? = nil, completionBlock: Constants.CompletionBlock?) {
@@ -106,14 +102,22 @@ class FlickrHandler: NSObject {
     
     func getImage(fromUrl url : String, completionBlock: Constants.CompletionBlock?) {
         group.enter()
-        networkManager.getData(urlString: url) { [weak self] (success, response , error) in
-            self?.group.leave()
-            completionBlock?(success, response , error)
+        queue.async(group: group, execute: {
+            self.networkManager.getData(urlString: url) { [weak self] (success, response , error) in
+                self?.group.leave()
+                completionBlock?(success, response , error)
+            }
+        })
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.delegate?.photoLoaded()
+            appDelegate.coreDataStack.save()
         }
     }
 
     func stopLoadingPhoto() {
         group.suspend()
+        queue.suspend()
         mainThread {
             appDelegate.coreDataStack.save()
         }

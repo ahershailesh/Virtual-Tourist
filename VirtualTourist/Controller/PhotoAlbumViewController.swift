@@ -19,6 +19,8 @@ class PhotoAlbumViewController: UICollectionViewController {
     let internalSpacing : CGFloat = 4
     var checkList = [IndexPath]()
     
+    private var totalPicsToDownload = 0
+    
     private var isAllPicsLoaded = true {
         didSet {
             showToolBar(isHidden: isAllPicsLoaded)
@@ -45,18 +47,21 @@ class PhotoAlbumViewController: UICollectionViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        FlickrHandler.shared.stopLoadingPhoto()
+//        FlickrHandler.shared.stopLoadingPhoto()
     }
     
     @objc func loadNewImages() {
+        totalPicsToDownload = 0
         if let thisLocation = location {
             FlickrHandler.shared.fetchNewSet(forLocation: thisLocation, completionBlock: { [weak self] (success, response, error) in
-                if success, let locationObj = response as? Location {
-                    self?.location = locationObj
-                    self?.downloadImages()
-                }
                 mainThread {
-                    success ? self?.collectionView?.reloadData() : self?.showAlert(message: "No new set of images are available")
+                    if success, let locationObj = response as? Location {
+                        self?.location = locationObj
+                        self?.collectionView?.reloadData()
+                        self?.downloadImages()
+                    } else {
+                         self?.showAlert(message: "No new set of images are available")
+                    }
                 }
             })
         }
@@ -73,7 +78,6 @@ class PhotoAlbumViewController: UICollectionViewController {
             appDelegate.coreDataStack.save()
         }
         mainThread {
-//            self.collectionView?.deleteItems(at: self.checkList)
             self.checkList = []
             self.collectionView?.reloadData()
         }
@@ -89,7 +93,7 @@ class PhotoAlbumViewController: UICollectionViewController {
         location?.pictureResult = result
     }
     
-    func downloadImages() {
+    private func downloadImages() {
         guard  let pics = location?.pictureResult?.pic, pics.count != 0 else {
             navigationController?.popViewController(animated: true)
             return
@@ -98,14 +102,16 @@ class PhotoAlbumViewController: UICollectionViewController {
             if let thisPicture = picture as? Picture {
                 if thisPicture.pic == nil, let link = thisPicture.link {
                     isAllPicsLoaded = false
+                    totalPicsToDownload += 1
+                    updatePicCount(count: totalPicsToDownload)
                     FlickrHandler.shared.getImage(fromUrl: link, completionBlock: {  [weak self]  (success, data, error) in
                         if success, let dataResponse = data as? NSData {
                             thisPicture.pic = dataResponse
                             mainThread { [weak self] in
+                                self?.totalPicsToDownload -= 1
+                                self?.updatePicCount(count: self?.totalPicsToDownload ?? 0)
                                 self?.collectionView?.reloadItems(at: [IndexPath(row: index, section: 0)])
                             }
-                        } else {
-                            self?.show(error: error)
                         }
                     })
                 } else {
@@ -114,13 +120,19 @@ class PhotoAlbumViewController: UICollectionViewController {
                     }
                 }
             }
-            
         }
     }
     
-    func showToolBar(isHidden: Bool) {
+    private func updatePicCount(count : Int) {
+        mainThread {
+            self.navigationItem.rightBarButtonItem = count == 0 ? nil : UIBarButtonItem(title: "\(count)", style: .done, target: nil, action: nil)
+        }
+    }
+    
+    private func showToolBar(isHidden: Bool) {
         mainThread { [weak self] in
             self?.navigationController?.isToolbarHidden = !isHidden
+            self?.updatePicCount(count: 0)
         }
     }
     
@@ -177,6 +189,10 @@ extension PhotoAlbumViewController : UICollectionViewDelegateFlowLayout {
 
 extension PhotoAlbumViewController : FlickrHandlerDelegate {
     func photoLoaded() {
-        isAllPicsLoaded = true
+        if totalPicsToDownload != 0 {
+            showAlert(message: "Something went wrong, could not able to download \(totalPicsToDownload) photos, please refresh page", title: "Error :(")
+        } else {
+            isAllPicsLoaded = true
+        }
     }
 }

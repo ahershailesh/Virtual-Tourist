@@ -36,6 +36,7 @@ extension UIViewController {
 
     func show(error : Error?, title : String = "Error"){
         guard let error = error else {
+            showAlert(message: "Something went wrong, please refresh page", title: "Error")
             return
         }
         showAlert(message: get(error).rawValue, title: "Error")
