@@ -22,9 +22,9 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         super.viewDidLoad()
         mapView.delegate = self
         
-        let singleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
-        singleTapRecognizer.delegate = self
-        mapView.addGestureRecognizer(singleTapRecognizer)
+        let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
+        longPressGestureRecogniser.delegate = self
+        mapView.addGestureRecognizer(longPressGestureRecogniser)
         
         title = "Add Location"
     }
