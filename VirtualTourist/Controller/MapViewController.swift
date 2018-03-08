@@ -17,13 +17,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     var locationBlock : (() -> AnyObject)?
     var result : MapResult?
+    var locations = [Location]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         
         let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(foundTap(sender:)))
-        longPressGestureRecogniser.delegate = self
         mapView.addGestureRecognizer(longPressGestureRecogniser)
         
         title = "Add Location"
@@ -31,6 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.isToolbarHidden = true
         guard let thisResult = getSavedMapView() else {
             return
         }
@@ -109,22 +110,43 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         return annotationView
     }
     
+    private func showLocationImages(location : Location) {
+        if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController {
+            albumViewController.location = location
+            mainThread {
+                self.navigationController?.pushViewController(albumViewController, animated: true)
+            }
+        }
+    }
+    
+    func getLocationIfExists(with annotation : MKAnnotation) -> Location? {
+        let location = locations.first { (location) -> Bool in
+            let latEqualStatus = location.getAnnotation().coordinate.latitude == annotation.coordinate.latitude
+            let longEqualStatus = location.getAnnotation().coordinate.longitude == annotation.coordinate.longitude
+            return latEqualStatus && longEqualStatus
+        }
+        return location
+    }
+
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let albumViewController = storyboard?.instantiateViewController(withIdentifier: "PhotoViewController") as? PhotoAlbumViewController, let annotation = view.annotation {
+        if  let annotation = view.annotation {
+            if let location = getLocationIfExists(with: annotation) {
+                showLocationImages(location: location)
+                return
+            }
             
-            FlickrHandler.shared.getPhotoByLocation(lat: annotation.coordinate.latitude, long: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, _) in
+            FlickrHandler.shared.getPhotoByLocation(lat: annotation.coordinate.latitude, long: annotation.coordinate.longitude, locationName: annotation.title!!, completionBlock: { [weak self] (success, response, error) in
                 if success {
-                    if let response = response as? Location {
-                        albumViewController.location = response
-                        mainThread {
-                            self?.navigationController?.pushViewController(albumViewController, animated: true)
-                        }
+                    if let location = response as? Location {
+                        self?.showLocationImages(location: location)
+                        self?.locations.append(location)
                     } else {
                         mainThread {
                             self?.showAlert(message: "This location has no pictures")
                         }
                     }
                 } else {
+                    self?.show(error: error)
                     saveLog("cannot able to load images")
                 }
             })

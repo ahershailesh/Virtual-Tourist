@@ -9,6 +9,7 @@
 
 import Foundation
 import CoreData
+import MapKit
 
 @objc(Location)
 public class Location: NSManagedObject {
@@ -22,5 +23,15 @@ public class Location: NSManagedObject {
         } else {
             fatalError("cannot able to fetch Location")
         }
+    }
+    
+    func getAnnotation() -> MKPointAnnotation {
+        let annotation = MKPointAnnotation()
+        if let latitude = CLLocationDegrees(exactly: lat),
+            let longitude = CLLocationDegrees(exactly: long) {
+         annotation.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        }
+        annotation.subtitle = locationName
+        return annotation
     }
 }

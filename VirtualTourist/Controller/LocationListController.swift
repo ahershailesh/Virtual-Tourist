@@ -46,7 +46,10 @@ class LocationListController: TableViewController {
     }
     
     @objc func addLocation() {
-        if let controlller = storyboard?.instantiateViewController(withIdentifier: "MapViewController") { 
+        if let controlller = storyboard?.instantiateViewController(withIdentifier: "MapViewController") as? MapViewController{
+            if let locations = requestHandler?.fetchedObjects as? [Location] {
+                controlller.locations = locations
+            }
             navigationController?.pushViewController(controlller, animated: true)
         }
     }
