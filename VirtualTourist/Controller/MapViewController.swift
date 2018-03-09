@@ -76,7 +76,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         try? appDelegate.coreDataStack.context?.save()
     }
     
-    @objc func foundTap(sender: UITapGestureRecognizer) {
+    @objc func foundTap(sender: UILongPressGestureRecognizer) {
+        if sender.state != .ended {
+            return
+        }
+        
         let touchLocation = sender.location(in: mapView)
         let locationCoordinate = mapView.convert(touchLocation, toCoordinateFrom: mapView)
         
