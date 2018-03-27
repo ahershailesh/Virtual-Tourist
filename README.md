@@ -6,6 +6,7 @@ Just put finger on the map and get all the images from that place. This project 
 * View all images, as you scroll down, next page is fetched automatically.
 * Save images in background to view them later on.
 * Delete annoying images.
+* Share your favourite image on social media.
 
 ## Libraries and Frameworks Used
 1. Foundation
