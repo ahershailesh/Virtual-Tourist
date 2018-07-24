@@ -18,22 +18,29 @@ class CoreDataStack: NSObject {
     
     init(modelName: String) {
         super.init()
+        //modelURL
         guard let modelURL = Bundle.main.url(forResource: modelName, withExtension: "momd") else {
             saveLog("unable to fetch model url")
             return
         }
         self.modelURL = modelURL
         
+        //model
         guard let model =  NSManagedObjectModel(contentsOf: modelURL) else {
             saveLog("unable to fetch model")
             return
         }
+        
         self.model = model
+        
+        //coordinator
         self.coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         
+        //context
         self.context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context?.persistentStoreCoordinator = coordinator
         
+        //PersistentStore
         let fm = FileManager.default
         guard  let docUrl = fm.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             saveLog("unable to reach to the document folder")

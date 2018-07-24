@@ -44,7 +44,7 @@ extension UIViewController {
     
     private func get(_ error : Error) -> Constants.ErrorCode{
         
-        if let err = error as? URLError{
+        if let err = error as? URLError {
             switch err.code {
             case URLError.Code.notConnectedToInternet, URLError.Code.cannotConnectToHost:
                 return Constants.ErrorCode.Network

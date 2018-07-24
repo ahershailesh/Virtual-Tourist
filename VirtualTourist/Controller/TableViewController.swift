@@ -58,7 +58,6 @@ extension TableViewController : NSFetchedResultsControllerDelegate {
         case .update:
             tableView.reloadRows(at: [indexPath!], with: .fade)
         }
-        
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
